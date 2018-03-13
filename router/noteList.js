@@ -13,23 +13,25 @@ const ControllerObj = require('../controller/index.js');
 
 
 /*缓存*/
-const NodeCache = require('node-cache');
-const myCache = new NodeCache();
+// const NodeCache = require('node-cache');
+// const myCache = new NodeCache();
 
 
 module.exports = function(){
 
     let router = new Router();
     router.get('set',async (ctx)=>{
+        console.log(ctx.query)
         ctx.session = {
           user_id: Math.random().toString(36).substr(2),
           count: 0
         }
-        myCache.mget(["myKey"],function(err,val){
-            console.log("val:"+val)
-            console.log(val)
-        });
-        
+        // ctx.body=ctx.req
+        // myCache.mget(["myKey"],function(err,val){
+        //     console.log("val:"+val)
+        //     console.log(val)
+        // });
+         ctx.redirect(`/note/list`);
         
     })
     router.get('list',async ctx => {  

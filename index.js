@@ -10,8 +10,8 @@ const MysqlSession = require('koa-mysql-session');
 const redisStore = require('koa-redis')
 
 /*缓存*/
-const NodeCache = require('node-cache');
-const myCache = new NodeCache();
+// const NodeCache = require('node-cache');
+// const myCache = new NodeCache();
 
 /*自定义*/
 const Config = require('./config');
@@ -57,24 +57,10 @@ let AddNote = require('./router/addNote')();
 let router = new Router();
 
 server.use(async (ctx, next) => {
-  if(ctx.session.user_id || ctx.url == '/note/set'){  //已登录或者到了
+  if(ctx.session.user_id || ctx.url == '/note/set'){  //已登录或者到了登录页
     await next();
-  }else{
-
-    /*myCache.set('redirectUrl','456789',(err,success)=>{
-      if( !err && success ){
-        console.log('成功设置缓存')
-        // true 
-        ctx.redirect(`/note/set`);
-      }
-    })*/
-    let succ = myCache.set('myKey',{a:1,b:2},10000);
-    console.log('succ'+succ)
-    if(succ){
-      ctx.redirect(`/note/set`);
-    }
-    
-    
+  }else{  //未登录
+    ctx.redirect(`/note/set`);  
   }
 })
 
