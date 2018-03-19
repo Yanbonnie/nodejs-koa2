@@ -21,7 +21,6 @@ module.exports = function(){
 
     let router = new Router();
     router.get('set',async (ctx)=>{
-        console.log(ctx.query)
         ctx.session = {
           user_id: Math.random().toString(36).substr(2),
           count: 0
@@ -34,8 +33,9 @@ module.exports = function(){
          ctx.redirect(`/note/list`);
         
     })
-    router.get('list',async ctx => {  
-        let list = await  ControllerObj.noteList();
+    router.post('list',async ctx => {  
+        let params = {...ctx.request.body};
+        let list = await  ControllerObj.noteList(params);
         ctx.body = list;
     })  
 

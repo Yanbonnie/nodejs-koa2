@@ -56,13 +56,13 @@ let AddNote = require('./router/addNote')();
 //装载所有字路由
 let router = new Router();
 
-server.use(async (ctx, next) => {
-  if(ctx.session.user_id || ctx.url == '/note/set'){  //已登录或者到了登录页
-    await next();
-  }else{  //未登录
-    ctx.redirect(`/note/set`);  
-  }
-})
+// server.use(async (ctx, next) => {
+//   if(ctx.session.user_id || ctx.url == '/note/set'){  //已登录或者到了登录页
+//     await next();
+//   }else{  //未登录
+//     ctx.redirect(`/note/set`);  
+//   }
+// })
 
 router.use('/note/',NoteList.routes(),NoteList.allowedMethods())
 router.use('/handle/',AddNote.routes(),AddNote.allowedMethods())

@@ -9,8 +9,9 @@ const { queryDb } = require('./async-db');
 
 module.exports = {
     //获取笔记列表
-    async noteList(){        
-        let data = await queryDb(`SELECT * FROM note_table ORDER BY ID DESC`);
+    async noteList(params){       
+    console.log(params.user_id) 
+        let data = await queryDb(`SELECT * FROM note_table WHERE user_id = '${params.user_id}' ORDER BY ID DESC`);
         return Meta(true,'ok',{list:data});
     },
     //获取笔记详情
@@ -23,6 +24,7 @@ module.exports = {
     },
     //新增笔记
     async addNote(params){   
+        console.log("添加笔记")
         //提交数据库之前做判断 
         if(!params.title){
             return Meta(false,'标题不能为空');
@@ -31,7 +33,7 @@ module.exports = {
             return Meta(false,'内容不能为空');
         }
         //请求数据库
-        let data = await queryDb(`INSERT INTO note_table (ID,title,context,postime) VALUES (0,'${params.title}', '${params.context}','${params.postime}');`);
+        let data = await queryDb(`INSERT INTO note_table (ID,title,context,postime,user_id) VALUES (0,'${params.title}', '${params.context}','${params.postime}','${params.user_id}');`);
         if(data.affectedRows > 0){
             return Meta();
         }else{
