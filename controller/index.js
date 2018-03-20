@@ -9,9 +9,10 @@ const { queryDb } = require('./async-db');
 
 module.exports = {
     //获取笔记列表
-    async noteList(params){       
-    console.log(params.user_id) 
-        let data = await queryDb(`SELECT * FROM note_table WHERE user_id = '${params.user_id}' ORDER BY ID DESC`);
+    async noteList(params){   
+        params.pagesize = params.pagesize ? params.pagesize : 10;
+        const curPage = (params.pagenum-1)*params.pagesize;
+        let data = await queryDb(`SELECT * FROM note_table WHERE user_id = '${params.user_id}' ORDER BY ID DESC LIMIT ${curPage}, ${params.pagesize}`);
         return Meta(true,'ok',{list:data});
     },
     //获取笔记详情
@@ -24,7 +25,6 @@ module.exports = {
     },
     //新增笔记
     async addNote(params){   
-        console.log("添加笔记")
         //提交数据库之前做判断 
         if(!params.title){
             return Meta(false,'标题不能为空');
